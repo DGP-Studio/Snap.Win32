@@ -132,7 +132,7 @@ namespace Snap.Win32.NativeMethod
         /// <param name="lpEnumFunc"></param>
         /// <param name="lParam"></param>
         /// <returns></returns>
-        [DllImport("user32.dll")] [return: MarshalAs(UnmanagedType.Bool)] public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        [DllImport("user32.dll")][return: MarshalAs(UnmanagedType.Bool)] public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
         #endregion
 
         #region ShowWindow
