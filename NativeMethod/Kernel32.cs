@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Snap.Win32.NativeMethod
 {
@@ -33,13 +34,25 @@ namespace Snap.Win32.NativeMethod
         #endregion
 
         #region LoadLibrary
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr LoadLibrary(string lpFileName);
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [ResourceExposure(ResourceScope.Process)]
+        public static extern IntPtr LoadLibrary(string libFilename);
         #endregion
 
         #region FreeLibrary
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [ResourceExposure(ResourceScope.Process)]
         public static extern bool FreeLibrary(IntPtr hModule);
         #endregion
+
+        // this methods are taken from https://raw.githubusercontent.com/Microsoft/referencesource/9da503f9ef21e8d1f2905c78d4e3e5cbb3d6f85a/mscorlib/microsoft/win32/win32native.cs
+        // Note - do NOT use this to call methods.  Use P/Invoke, which will
+        // do much better things w.r.t. marshaling, pinning memory, security 
+        // stuff, better interactions with thread aborts, etc.  This is used
+        // solely by DoesWin32MethodExist for avoiding try/catch EntryPointNotFoundException
+        // in scenarios where an OS Version check is insufficient
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, BestFitMapping = false, SetLastError = true, ExactSpelling = true)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, string methodName);
     }
 }

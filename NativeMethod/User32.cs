@@ -6,28 +6,29 @@ namespace Snap.Win32.NativeMethod
     public class User32
     {
         #region SetWindowPos
-        public const uint SWP_NOSIZE = 0x0001;
-        public const uint SWP_NOMOVE = 0x0002;
-        public const uint SWP_NOZORDER = 0x0004;
-        public const uint SWP_NOACTIVATE = 0x0010;
-        public const uint SWP_SHOWWINDOW = 0x0040;
-        public const uint SWP_ASYNCWINDOWPOS = 0x4000;
+        [Flags]
+        public enum SetWindowPosFlags : uint
+        {
+            AsynchronousWindowPosition = 0x4000,
+            DeferErase = 0x2000,
+            DrawFrame = 0x0020,
+            FrameChanged = 0x0020,
+            HideWindow = 0x0080,
+            DoNotActivate = 0x0010,
+            DoNotCopyBits = 0x0100,
+            IgnoreMove = 0x0002,
+            DoNotChangeOwnerZOrder = 0x0200,
+            DoNotRedraw = 0x0008,
+            DoNotReposition = 0x0200,
+            DoNotSendChangingEvent = 0x0400,
+            IgnoreResize = 0x0001,
+            IgnoreZOrder = 0x0004,
+            ShowWindow = 0x0040,
+        }
 
-        public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
-        /// <summary>
-        /// 更改一个子窗口，弹出窗口或顶级窗口的大小，位置和Z顺序。
-        /// 这些窗口根据其在屏幕上的显示方式进行排序。
-        /// 最顶层的窗口有最高排序，是Z顺序中的第一个窗口
-        /// </summary>
-        /// <param name="hWnd"><see cref="System.Windows.Window"/>实例的句柄</param>
-        /// <param name="hWndInsertAfter">窗口的句柄，位于Z顺序中定位窗口之前</param>
-        /// <param name="X">按客户端坐标，相对窗口左侧的新位置</param>
-        /// <param name="Y">按客户端坐标，相对窗口上侧的新位置</param>
-        /// <param name="cx">窗口的新宽度（以像素为单位）</param>
-        /// <param name="cy">窗口的新高度（以像素为单位）</param>
-        /// <param name="uFlags">窗口大小和定位标志</param>
-        /// <returns>如果函数调用成功，则返回值为<see cref="true"/></returns>
-        [DllImport("user32.dll")] public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
         #endregion
 
         #region SetWindowLong
@@ -273,6 +274,29 @@ namespace Snap.Win32.NativeMethod
 
         [DllImport("user32.dll")]
         public static extern bool SetClipboardData(uint uFormat, IntPtr data);
+        #endregion
+
+        #region ChangeWindowMessageFilter
+        public enum ChangeWindowMessageFilterFlags : uint
+        {
+            Add = 1,
+            Remove = 2
+        }
+
+        [DllImport("user32.dll")]
+        public static extern bool ChangeWindowMessageFilter(uint msg, ChangeWindowMessageFilterFlags flags);
+        #endregion
+
+        #region MonitorFromWindow
+        public enum MonitorOpts : uint
+        {
+            MONITOR_DEFAULTTONULL = 0x00000000,
+            MONITOR_DEFAULTTOPRIMARY = 0x00000001,
+            MONITOR_DEFAULTTONEAREST = 0x00000002,
+        }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr MonitorFromWindow(IntPtr hwnd, MonitorOpts dwFlags);
         #endregion
     }
 }
