@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Snap.Win32.NativeMethod
@@ -7,6 +8,7 @@ namespace Snap.Win32.NativeMethod
     {
         #region SetWindowPos
         [Flags]
+        [SuppressMessage("Design", "CA1069:不应复制枚举值")]
         public enum SetWindowPosFlags : uint
         {
             AsynchronousWindowPosition = 0x4000,
@@ -92,7 +94,10 @@ namespace Snap.Win32.NativeMethod
         [DllImport("user32.dll", SetLastError = true)] public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
         #endregion
 
-        #region SendMessageTimeout
+        #region SendMessage
+        [DllImport("User32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
         /// <summary>
         /// 
         /// </summary>
@@ -117,6 +122,16 @@ namespace Snap.Win32.NativeMethod
         /// <returns></returns>
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)] public static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint Msg, UIntPtr wParam, IntPtr lParam, SendMessageTimeoutFlags fuFlags, uint uTimeout, out UIntPtr lpdwResult);
 
+        #endregion
+
+        #region PostMessage
+        public const int WM_MOUSEWHEEL = 0x020A; // 滚轮滑动
+        public const int WM_MOUSEMOVE = 0x200; // 鼠标移动
+        public const int WM_LBUTTONDOWN = 0x201; //按下鼠标左键
+        public const int WM_LBUTTONUP = 0x202; //释放鼠标左键
+
+        [DllImport("user32.dll")]
+        public static extern bool PostMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         #endregion
 
         #region EnumWindows
@@ -297,6 +312,57 @@ namespace Snap.Win32.NativeMethod
 
         [DllImport("user32.dll")]
         public static extern IntPtr MonitorFromWindow(IntPtr hwnd, MonitorOpts dwFlags);
+        #endregion
+
+        #region SetForegroundWindow
+        [DllImport("user32.dll")]
+        public static extern int SetForegroundWindow(IntPtr hwnd);
+        #endregion
+
+        #region IsIconic
+        [DllImport("user32.dll")]
+        public static extern bool IsIconic(IntPtr hWnd);
+        #endregion
+
+        #region GetWindowRect
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
+        #endregion
+
+        #region MouseEvent
+        [Flags]
+        public enum MouseEventFlag : uint
+        {
+            Move = 0x0001,
+            LeftDown = 0x0002,
+            LeftUp = 0x0004,
+            RightDown = 0x0008,
+            RightUp = 0x0010,
+            MiddleDown = 0x0020,
+            MiddleUp = 0x0040,
+            XDown = 0x0080,
+            XUp = 0x0100,
+            Wheel = 0x0800,
+            VirtualDesk = 0x4000,
+            Absolute = 0x8000
+        }
+
+        [DllImport("user32", EntryPoint = "mouse_event")]
+        public static extern int MouseEvent(MouseEventFlag dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
+        #endregion
+
+        #region GetDesktopWindow
+        [DllImport("user32.dll", EntryPoint = "GetDesktopWindow")]
+        public static extern IntPtr GetDesktopWindow();
+        #endregion
+
+        #region GDC
+        [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+        public static extern IntPtr GetDC(IntPtr hWnd);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
         #endregion
     }
 }
