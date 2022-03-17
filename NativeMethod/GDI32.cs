@@ -8,11 +8,13 @@ namespace Snap.Win32.NativeMethod
         #region GetDeviceCaps
         public enum DeviceCaps
         {
+            HORZRES = 8,
             VERTRES = 10,
             DESKTOPVERTRES = 117,
+            DESKTOPHORZRES = 118
         }
         [DllImport("gdi32.dll")]
-        internal static extern int GetDeviceCaps(IntPtr hdc, DeviceCaps nIndex);
+        public static extern int GetDeviceCaps(IntPtr hdc, DeviceCaps nIndex);
         #endregion
 
         #region StretchBlt

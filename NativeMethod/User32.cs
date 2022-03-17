@@ -364,5 +364,17 @@ namespace Snap.Win32.NativeMethod
         [DllImport("user32.dll", ExactSpelling = true)]
         public static extern IntPtr ReleaseDC(IntPtr hWnd, IntPtr hDC);
         #endregion
+
+        #region Hotkey
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        #endregion
+
+        #region SetCursorPos
+        [DllImport("user32.dll")]
+        public static extern bool SetCursorPos(int X, int Y);
+        #endregion
     }
 }
