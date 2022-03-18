@@ -25,10 +25,10 @@ namespace Snap.Win32
 
         public RECT(int left, int top, int right, int bottom)
         {
-            this.Left = left;
-            this.Top = top;
-            this.Right = right;
-            this.Bottom = bottom;
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
         }
 
         public RECT(RECT rcSrc)
