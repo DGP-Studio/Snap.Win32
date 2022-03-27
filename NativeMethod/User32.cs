@@ -71,7 +71,8 @@ namespace Snap.Win32.NativeMethod
         /// <param name="lpWindowClass"></param>
         /// <param name="lpWindowName"></param>
         /// <returns></returns>
-        [DllImport("user32.dll", SetLastError = true)] public static extern IntPtr FindWindow(string lpWindowClass, string lpWindowName);
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpWindowClass, string lpWindowName);
         /// <summary>
         /// 
         /// </summary>

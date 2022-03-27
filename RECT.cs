@@ -15,35 +15,35 @@ namespace Snap.Win32
 
         public int Width
         {
-            get => Math.Abs(Right - Left);
+            get => Math.Abs(this.Right - this.Left);
         }
 
         public int Height
         {
-            get => Bottom - Top;
+            get => this.Bottom - this.Top;
         }
 
         public RECT(int left, int top, int right, int bottom)
         {
-            Left = left;
-            Top = top;
-            Right = right;
-            Bottom = bottom;
+            this.Left = left;
+            this.Top = top;
+            this.Right = right;
+            this.Bottom = bottom;
         }
 
         public RECT(RECT rcSrc)
         {
-            Left = rcSrc.Left;
-            Top = rcSrc.Top;
-            Right = rcSrc.Right;
-            Bottom = rcSrc.Bottom;
+            this.Left = rcSrc.Left;
+            this.Top = rcSrc.Top;
+            this.Right = rcSrc.Right;
+            this.Bottom = rcSrc.Bottom;
         }
 
         public bool IsEmpty
         {
             get =>
                 // BUGBUG : On Bidi OS (hebrew arabic) left > right
-                Left >= Right || Top >= Bottom;
+                this.Left >= this.Right || this.Top >= this.Bottom;
         }
 
         /// <summary> Return a user friendly representation of this struct </summary>
@@ -53,7 +53,7 @@ namespace Snap.Win32
             {
                 return "RECT {Empty}";
             }
-            return "RECT { left : " + Left + " / top : " + Top + " / right : " + Right + " / bottom : " + Bottom + " }";
+            return "RECT { left : " + this.Left + " / top : " + this.Top + " / right : " + this.Right + " / bottom : " + this.Bottom + " }";
         }
 
         /// <summary> Determine if 2 RECT are equal (deep compare) </summary>
@@ -65,7 +65,7 @@ namespace Snap.Win32
         /// <summary>Return the HashCode for this struct (not garanteed to be unique)</summary>
         public override int GetHashCode()
         {
-            return Left.GetHashCode() + Top.GetHashCode() + Right.GetHashCode() + Bottom.GetHashCode();
+            return this.Left.GetHashCode() + this.Top.GetHashCode() + this.Right.GetHashCode() + this.Bottom.GetHashCode();
         }
 
         /// <summary> Determine if 2 RECT are equal (deep compare)</summary>
